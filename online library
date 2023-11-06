@@ -1,0 +1,325 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+class User
+{
+  private:
+    string name;
+    int id;
+    string password;
+    string email;
+    static int count;
+  public:
+    User()
+    {
+        name = "";
+        password = "";
+        email = "";
+        count++;
+        id = count;
+    }
+    User(string name, string password, string email)
+    {
+        this->name = name;
+        this->password = password;
+        this->email = email;
+        count++;
+        id = count;
+    }
+    User(const User& user)
+    {
+        name = user.name;
+        password = user.password;
+        email = user.email;
+        id = user.id;
+    }
+    void setName(string name) { this->name = name; }
+    string getName()const { return name; }
+    void setPassword(string password) { this->password = password; }
+    string getPassword()const { return password; }
+    void setEmail(string email) { this->email = email; }
+    string getEmail()const { return email; }
+    void setId(int ID) { id = ID; }
+    int getId()const
+    {
+        return id;
+    }
+    void displayInfo()
+    {
+        cout << "  NAME : ";
+        cin >> name;
+        cout << "  ID :";
+        cin >> id;
+        cout << "  EMAIL :";
+        cin >> email;
+    }
+};
+class Book 
+{
+  private:
+    int bookId;
+    string title;
+    string author;
+    string publisher;
+    int yearPublished;
+    int numPages;
+    string category;
+  public:
+    Book(int id, string t, string a, string pub, int year, int pages, string cat) 
+    {
+        bookId = id;
+        title = t;
+        author = a;
+        publisher = pub;
+        yearPublished = year;
+        numPages = pages;
+        category = cat;
+    }
+    int getBookId() 
+    {
+        return bookId;
+    }
+    string getTitle() 
+    {
+        return title;
+    }
+    string getAuthor()
+    {
+        return author;
+    }
+    string getPublisher() 
+    {
+        return publisher;
+    }
+    int getYearPublished()
+    {
+        return yearPublished;
+    }
+    int getNumPages() 
+    {
+        return numPages;
+    }
+    string getCategory() 
+    {
+        return category;
+    }
+    void setTitle(string t) 
+    {
+        title = t;
+    }
+    void setAuthor(string a)
+    {
+        author = a;
+    }
+    void setPublisher(string p) 
+    {
+        publisher = p;
+    }
+    void setYearPublished(int y)
+    {
+        yearPublished = y;
+    }
+    void setNumPages(int n) 
+    {
+        numPages = n;
+    }
+    void setCategory(string c)
+    {
+        category = c;
+    }
+};
+class Library 
+{
+  private:
+    vector<Book> books;
+    int nextBookId = 1;
+  public:
+    void addBook(string title, string author, string publisher, int yearPublished, int numPages, string category, bool message)
+    {
+        Book book(nextBookId, title, author, publisher, yearPublished, numPages, category);
+        books.push_back(book);
+        nextBookId++;
+        if (message == true)
+        {
+            cout << "Book added successfully!" << endl;
+        }
+    }
+    void displayBooks() 
+    {
+        if (books.size() == 0) 
+        {
+            cout << "No books in the library!" << endl;
+            return;
+        }
+        cout << "All books in the library: " << endl;
+        for (int i = 0; i < books.size(); i++)
+        {
+            Book book = books[i];
+            cout << "ID: " << book.getBookId() << ", Title: " << book.getTitle() << ", Author: " << book.getAuthor() << ", Publisher: " << book.getPublisher() << ", Year Published: " << book.getYearPublished() << ", Number of Pages: " << book.getNumPages() << ", Category: " << book.getCategory() << endl;
+        }
+    }
+    void searchBook(string title)
+    {
+        bool bookFound = false;
+        for (int i = 0; i < books.size(); i++)
+        {
+            Book book = books[i];
+            if (book.getTitle() == title) 
+            {
+                cout << "Book found: " << endl;
+                cout << "ID: " << book.getBookId() << ", Title: " << book.getTitle() << ", Author: " << book.getAuthor() << ", Publisher: " << book.getPublisher() << ", Year Published: " << book.getYearPublished() << ", Number of Pages: " << book.getNumPages() << ", Category: " << book.getCategory() << endl;
+                bookFound = true;
+                break;
+            }
+        }
+        if (!bookFound) 
+        {
+            cout << "Book not found!" << endl;
+        }
+    }
+    void editBook(int bookId, string title, string author, string publisher, int yearPublished, int numPages, string category)
+    {
+        bool bookFound = false;
+        for (int i = 0; i < books.size(); i++) 
+        {
+            Book& book = books[i];
+            if (book.getBookId() == bookId) 
+            {
+                book.setTitle(title);
+                book.setAuthor(author);
+                book.setPublisher(publisher);
+                book.setYearPublished(yearPublished);
+                book.setNumPages(numPages);
+                book.setCategory(category);
+                cout << "Book edited successfully!" << endl;
+                bookFound = true;
+                break;
+            }
+        }
+        if (!bookFound) 
+        {
+            cout << "Book not found!" << endl;
+        }
+    }
+    void deleteBook(int bookId)
+    {
+        bool bookFound = false;
+        for (int i = 0; i < books.size(); i++)
+        {
+            Book& book = books[i];
+            if (book.getBookId() == bookId)
+            {
+                books.erase(books.begin() + i);
+                cout << "Book deleted successfully!" << endl;
+                bookFound = true;
+                break;
+            }
+        }
+        if (!bookFound)
+        {
+            cout << "Book not found!" << endl;
+        }
+    }
+};
+int User::count = 0;
+int main() 
+{
+    cout << "-------------------------------------" << endl;
+    cout << " >> Welcome to the library system <<" << endl;
+    cout << "-------------------------------------" << endl;
+    User u1;
+    u1.displayInfo();
+    Library library;
+    library.addBook("The Lean Startup", "Eric Ries", "Crown", 2011, 336, "Business", false);
+    library.addBook("Cracking the Coding Interview", "Gayle Laakmann", "GareerCup", 2015, 687, "Business", false);
+    library.addBook("Code Complete ", "Steve McConnell", "Microsoft Press", 2004, 960, "Progremming", false);
+    library.addBook("Clean Code", "Robert C.Martin", "Prentice Hall", 2004, 694, "Programming", false);
+    while (true) 
+    {
+        cout << "----------------" << endl;
+        cout << "Choose an option:" << endl;
+        cout << "----------------" << endl;
+        cout << "1. Add book" << endl;
+        cout << "2. Display all books" << endl;
+        cout << "3. Search for a book" << endl;
+        cout << "4. Edit a book" << endl;
+        cout << "5. Delete a book" << endl;
+        cout << "6. Exit" << endl;
+        int choice;
+        cin >> choice;
+        if (choice == 1)
+        {
+            string title, author, publisher, category;
+            int yearPublished, numPages;
+            cout << "Enter book title:";
+            cin.ignore();
+            getline(cin, title);
+            cout << "Enter book author: ";
+            getline(cin, author);
+            cout << "Enter book publisher: ";
+            getline(cin, publisher);
+            cout << "Enter year published: ";
+            cin >> yearPublished;
+            cout << "Enter number of pages: ";
+            cin >> numPages;
+            cout << "Enter book category: ";
+            cin.ignore();
+            getline(cin, category);
+            library.addBook(title, author, publisher, yearPublished, numPages, category, true);
+        }
+        else if (choice == 2) 
+        
+        {
+            library.displayBooks();
+        }
+        else if (choice == 3)
+        {
+            string title;
+            cout << "Enter book title to search for: ";
+            cin.ignore();
+            getline(cin, title);
+            library.searchBook(title);
+        }
+        else if (choice == 4) 
+        {
+            int bookId;
+            string title, author, publisher, category;
+            int yearPublished, numPages;
+            cout << "Enter book ID to edit: ";
+            cin >> bookId;
+            cout << "Enter new book title: ";
+            cin.ignore();
+            getline(cin, title);
+            cout << "Enter new book author: ";
+            getline(cin, author);
+            cout << "Enter new book publisher: ";
+            getline(cin, publisher);
+            cout << "Enter new year published: ";
+            cin >> yearPublished;
+            cout << "Enter new number of pages: ";
+            cin >> numPages;
+            cout << "Enter new book category: ";
+            cin.ignore();
+            getline(cin, category);
+            library.editBook(bookId, title, author, publisher, yearPublished, numPages, category);
+        }
+        else if (choice == 5) 
+        {
+            int bookId;
+            cout << "Enter book ID to delete: ";
+            cin >> bookId;
+            library.deleteBook(bookId);
+        }
+        else if (choice == 6) 
+        {
+            cout << "Exiting library system..." << endl;
+            break;
+        }
+        else
+        {
+            cout << "Invalid choice! Please try again." << endl;
+        }
+    }
+    return 0;
+}
